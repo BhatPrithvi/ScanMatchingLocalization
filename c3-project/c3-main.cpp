@@ -189,7 +189,7 @@ int main(){
 	auto ego_actor = world.SpawnActor((*vehicles)[12], transform);
     
     // Select "ICP" or "NDT"
-    std::string SEL = "NDT"
+    std::string SEL = "NDT";
   
 	//Create lidar
 	auto lidar_bp = *(blueprint_library->Find("sensor.lidar.ray_cast"));
