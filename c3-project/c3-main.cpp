@@ -92,10 +92,10 @@ void drawCar(Pose pose, int num, Color color, double alpha, pcl::visualization::
 
 	BoxQ box;
 	box.bboxTransform = Eigen::Vector3f(pose.position.x, pose.position.y, 0);
-    box.bboxQuaternion = getQuaternion(pose.rotation.yaw);
-    box.cube_length = 4;
-    box.cube_width = 2;
-    box.cube_height = 2;
+        box.bboxQuaternion = getQuaternion(pose.rotation.yaw);
+        box.cube_length = 4;
+        box.cube_width = 2;
+        box.cube_height = 2;
 	renderBox(viewer, box, num, color, alpha);
 }
 
@@ -115,16 +115,16 @@ Eigen::Matrix4d ICP(PointCloudT::Ptr target, PointCloudT::Ptr source, Pose start
           renderPointCloud(viewer, transformSource, "transform_scan_"+to_string(count), Color(1,0,1)); // render corrected scan
       */
 
-    pcl::console::TicToc time;
-    time.tic ();
-    pcl::IterativeClosestPoint<PointT, PointT> icp;
-    icp.setMaximumIterations (iterations);
-    icp.setInputSource (transformSource);
-    icp.setInputTarget (target);
-    icp.setMaxCorrespondenceDistance (2);
-    //icp.setTransformationEpsilon(0.001);
-    //icp.setEuclideanFitnessEpsilon(.05);
-    //icp.setRANSACOutlierRejectionThreshold (10);
+      pcl::console::TicToc time;
+      time.tic ();
+      pcl::IterativeClosestPoint<PointT, PointT> icp;
+      icp.setMaximumIterations (iterations);
+      icp.setInputSource (transformSource);
+      icp.setInputTarget (target);
+      icp.setMaxCorrespondenceDistance (2);
+      //icp.setTransformationEpsilon(0.001);
+      //icp.setEuclideanFitnessEpsilon(.05);
+      //icp.setRANSACOutlierRejectionThreshold (10);
 
       PointCloudT::Ptr cloud_icp (new PointCloudT);  // ICP output point cloud
       icp.align (*cloud_icp);
@@ -160,12 +160,12 @@ Eigen::Matrix4d NDT(pcl::NormalDistributionsTransform<pcl::PointXYZ, pcl::PointX
 
     Eigen::Matrix4f init_guess = transform3D(startingPose.rotation.yaw, startingPose.rotation.pitch, startingPose.rotation.roll, startingPose.position.x, startingPose.position.y, startingPose.position.z).cast<float>();
 
-      // Setting max number of registration iterations.
-      ndt.setMaximumIterations (iterations);
+    // Setting max number of registration iterations.
+    ndt.setMaximumIterations (iterations);
     ndt.setInputSource (source);
 
     pcl::PointCloud<pcl::PointXYZ>::Ptr cloud_ndt (new pcl::PointCloud<pcl::PointXYZ>);
-      ndt.align (*cloud_ndt, init_guess);
+    ndt.align (*cloud_ndt, init_guess);
 
     //cout << "Normal Distributions Transform has converged:" << ndt.hasConverged () << " score: " << ndt.getFitnessScore () <<  " time: " << time.toc() <<  " ms" << endl;
 
@@ -188,16 +188,16 @@ int main(){
 	auto transform = map->GetRecommendedSpawnPoints()[1];
 	auto ego_actor = world.SpawnActor((*vehicles)[12], transform);
     
-    // Select "ICP" or "NDT"
-    std::string SEL = "NDT";
+        // Select "ICP" or "NDT"
+        std::string SEL = "NDT";
   
 	//Create lidar
 	auto lidar_bp = *(blueprint_library->Find("sensor.lidar.ray_cast"));
 	// CANDO: Can modify lidar values to get different scan resolutions
 	lidar_bp.SetAttribute("upper_fov", "15");
-    lidar_bp.SetAttribute("lower_fov", "-25");
-    lidar_bp.SetAttribute("channels", "32");
-    lidar_bp.SetAttribute("range", "30");
+        lidar_bp.SetAttribute("lower_fov", "-25");
+        lidar_bp.SetAttribute("channels", "32");
+        lidar_bp.SetAttribute("range", "30");
 	lidar_bp.SetAttribute("rotation_frequency", "60");
 	lidar_bp.SetAttribute("points_per_second", "500000");
 
@@ -243,7 +243,7 @@ int main(){
 	
 	Pose poseRef(Point(vehicle->GetTransform().location.x, vehicle->GetTransform().location.y, vehicle->GetTransform().location.z), Rotate(vehicle->GetTransform().rotation.yaw * pi/180, vehicle->GetTransform().rotation.pitch * pi/180, vehicle->GetTransform().rotation.roll * pi/180));
 	double maxError = 0;
-    PointCloudT::Ptr transformed_scan (new PointCloudT);
+        PointCloudT::Ptr transformed_scan (new PointCloudT);
 	while (!viewer->wasStopped())
   	{
 		while(new_scan){
