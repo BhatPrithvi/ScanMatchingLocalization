@@ -289,9 +289,10 @@ int main(){
 			// TODO: Find pose transform by using ICP or NDT matching
 			//pose = ....
             pose = Pose(Point(vehicle->GetTransform().location.x, vehicle->GetTransform().location.y, vehicle->GetTransform().location.z), Rotate(vehicle->GetTransform().rotation.yaw * pi/180, vehicle->GetTransform().rotation.pitch * pi/180, vehicle->GetTransform().rotation.roll * pi/180)) - poseRef;
-            if (SEL == "ICP")
+            Eigen::Matrix4d transform;
+	    if (SEL == "ICP")
             {
-            Eigen::Matrix4d transform = ICP(mapCloud, cloudFiltered, pose, 10);
+            transform = ICP(mapCloud, cloudFiltered, pose, 10);
             }  
             else if (SEL == "NDT")
             { 
@@ -303,7 +304,7 @@ int main(){
             //Setting Resolution of NDT grid structure (VoxelGridCovariance).
             ndt.setResolution (1);
             ndt.setInputTarget (mapCloud);
-            Eigen::Matrix4d transform = NDT(ndt, cloudFiltered, pose, 3);
+            transform = NDT(ndt, cloudFiltered, pose, 3);
             }
             else
             {
